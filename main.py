@@ -5,7 +5,13 @@ def test0():
     tree.insert_key(20)
     tree.insert_key(30)
     tree.insert_key(40)
-    tree.insert_key(10)
+    # tree.insert_key(10)
+    tree.insert_key(50)
+    tree.insert_key(45)
+    tree.insert_key(15)
+    tree.insert_key(35)
+    tree.insert(Pair(10, "Olgier er kongurinn"))
+
     print(tree)
     print(tree.is_in(10))
     print(tree.is_in(50))
@@ -18,6 +24,11 @@ def test0():
     print()
     print('==>', tree.pairs())
     print('=>', tree.keys())
+    print(tree.get(10))
+    tree.clear()
+    print(tree)
+
+
 
 def test1():
     tree = BinarySearchTree()
@@ -43,4 +54,3 @@ def test1():
 
 # Some basic BST tests, add more tests as needed!
 test0()
-test1()
