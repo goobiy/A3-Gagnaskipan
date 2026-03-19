@@ -264,9 +264,7 @@ class BinarySearchTree(IBinarySearchTree):
         """
         self._root = None
     
-    def delete_node(self, node: BinarySearchTree._Node) -> bool:
-
-
+    def delete_node(self, node: BinarySearchTree._Node):
 
         # Two children
         if node.left is not None and node.right is not None:

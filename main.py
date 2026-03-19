@@ -1,4 +1,5 @@
 from binary_search_tree import Pair, BinarySearchTree
+from my_dict import MyDict
 
 def test0():
     tree = BinarySearchTree()
@@ -54,4 +55,24 @@ def test1():
 
 
 # Some basic BST tests, add more tests as needed!
-test1()
+
+d = MyDict()
+
+print(d)
+
+
+d[0] = "Gummso"
+d[1] = "123"
+d[2] = "Go"
+d[3] = "Drakula"
+
+print(d)
+
+print(d[1])
+print(d.get(2,"Nope"))
+
+print(len(d))
+
+print(d)
+del d[0]
+print(d)

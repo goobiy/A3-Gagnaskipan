@@ -1,7 +1,9 @@
 #
 # MyDict dictionary.
 # Your name:
-#  - <Add your name here>
+#  - Guðmundur Alexander Magnússon
+#  - Olgeir Otri Engilbertsson
+#  - Hafþór Haugen
 #
 
 from collections.abc import MutableMapping
@@ -11,8 +13,7 @@ class MyDict(MutableMapping):
 
     def __init__(self):
         self._bst = BinarySearchTree()  # Your BST, feel free to add more member variables as needed.
-        # TO DO ...
-        ...
+        self.size = 0
 
     def __iter__(self):
         """
@@ -37,34 +38,43 @@ class MyDict(MutableMapping):
         Returns the value at key entry, i.e. value = d[key].
         Raises KeyError if the key is not found.
         """
-        # TO DO ...
-        ...
+
+        return self._bst.get(key)
 
     def get(self, key, default=None):
         """
         Returns the value at key entry, i.e. value = d.get(key) ; or d.get(key,default) .
         Returns default if key not found.
         """
-        # TO DO ...
-        return default
+        
+        value = self._bst.get(key)
+
+        if value:
+            return value
+        else:
+            return default
+            
 
     def __setitem__(self, key, value):
         """
         Sets the value at key entry, i.e. d[key] = value
         """
-        # TO DO ...
-        ...
+        
+        new_pair = Pair(key,value)
+        self.size += 1
+        return self._bst.insert(new_pair)
 
     def __delitem__(self, key):
         """
         Returns the entry at kay, i.e. del d[key]
         """
-        # TO DO ...
-        ...
+        
+        self.size -= 1
+        return self._bst.delete(key)
 
     def __len__(self):
         """
         Returns the number of entries in the dictionary.
         """
-        # TO DO ...
-        return 0
+
+        return self.size
