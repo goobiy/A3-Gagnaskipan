@@ -57,6 +57,7 @@ class BinarySearchTree(IBinarySearchTree):
         """
         In a non-empty tree, returns the minimum key node (first in an inorder traversal), otherwise None.
         """
+        
         curr = self._root
         if curr is None:
             return None
@@ -97,7 +98,6 @@ class BinarySearchTree(IBinarySearchTree):
             return curr
 
 
-
         while curr.parent.pair.key > curr.pair.key:
             curr = curr.parent
 
@@ -119,7 +119,6 @@ class BinarySearchTree(IBinarySearchTree):
             while curr.left is not None:
                 curr = curr.left
             return curr
-
 
 
         while curr.parent.pair.key < curr.pair.key:
@@ -163,7 +162,6 @@ class BinarySearchTree(IBinarySearchTree):
         Returns True is a new element was inserted, otherwise False (was updated).
         """
         
-
         curr: BinarySearchTree._Node = self._root
         if curr is None:
             new_node = self._Node(None,None,None,pair)
@@ -197,6 +195,7 @@ class BinarySearchTree(IBinarySearchTree):
         Returns True if the tree is empty, False otherwise.
         """
         return self._root is None
+    
 
     def is_in(self, key: object) -> bool:
         """
@@ -232,6 +231,7 @@ class BinarySearchTree(IBinarySearchTree):
         """
         Returns the value of the element with the given key, or None if the key does not exist.
         """
+
         curr = self._root
 
         while curr is not None:
@@ -246,25 +246,16 @@ class BinarySearchTree(IBinarySearchTree):
 
         return None
     
-    def __get_node(self):
-        pass
 
     def pairs(self) -> list[Pair]:
         """
         Returns a list of all the (key, value) pairs in the tree, in an increasing order.
         """
 
-        pairs_list = []     # Sjáum hvort þetta sé í lagi, eins og iter fallið NOTA FOR TREE IN SELF
-        node = self._first()
-        while node is not None:
-
-            pairs_list.append(node.pair)
-            node = self._after(node)
-        
-
+        pairs_list = []
+        for pair in self:
+            pairs_list.append(pair)
         return pairs_list
-
-
 
 
     def clear(self):
@@ -272,93 +263,53 @@ class BinarySearchTree(IBinarySearchTree):
         Removes all elements from the tree (tree becomes empty).
         """
         self._root = None
+    
+    def delete_node(self, node: BinarySearchTree._Node) -> bool:
+
+
+
+        # Two children
+        if node.left is not None and node.right is not None:
+            predecessor = self._before(node)
+            node.pair = predecessor.pair
+            self.delete_node(predecessor)
+
+        # No children or one child
+        else:
+            # Assigning child to the left node or the right node
+            child = node.left if node.left is not None else node.right
+            
+            # If the node is the root
+            if node.parent is None:
+                self._root = child
+                if child is not None:
+                    child.parent = None
+            
+            # Not the root
+            else:
+                # Point the parent to the new child
+                if node.parent.left is node:
+                    node.parent.left = child
+                else:
+                    node.parent.right = child
+            
+            if child is not None:
+                child.parent = node.parent
+
 
     def delete(self, key: object) -> bool:
         """
         Deletes the element with key, if exists.
         Returns True if the element was deleted (existed), otherwise False (does not exist).
         """
-        if not self.is_in(key): # nota frekar get()? Hraðara?
-            return False
-        
-        if self.is_empty():
-            return False
-        
+
         curr = self._root
-        
 
-        while curr.pair.key != key:
-            if key > curr.pair.key:
-                curr = curr.right
-            elif key < curr.pair.key:
-                curr = curr.left
+        while curr is not None and curr.pair.key != key:
+            curr = curr.right if key > curr.pair.key else curr.left
 
-        # No childs
-        if curr.left is None and curr.right is None:
-            if curr.parent.pair.key > curr.pair.key:
-                curr.parent.left = None
-            else:
-                curr.parent.right = None
-            curr = None
-            return True
-        
-        # One child
-        if curr.left is None:
-            curr.right.parent = curr.parent
-            curr.parent.left = curr.right
-        if curr.right is None:
-            curr.left.parent = curr.parent
-            curr.parent.right = curr.left
+        if curr is None:
+            return False
 
-        # Two childs
-        elif curr.right is not None and curr.left is not None:
-            
-            successor = self._before(curr)
-
-           # VANTAR CONDITION FYRIR ROOT
-
-            # if successor.right is not None:
-            #     successor.parent.right = successor.left
-
-            # Changing the successors parent.right to None only if if the successor was not a leaf
-            if successor.left is not None:
-                
-                #Give the successors children to the successors parent
-                if successor.left is None:
-                    successor.parent.right = successor.right
-                else:
-                   successor.parent.right = successor.right
-
-            else:
-                successor.parent.right = None
-
-            #make sure that successor does not get itself as a child
-            if successor.parent != curr:
-                successor.left = curr.left
-            successor.right = curr.right
-            successor.parent = curr.parent
-
-            # Connecting the child to the new parent
-            curr.left.parent = successor
-            curr.right.parent = successor
-
-            # Connecting the parent to the successor, and checking if its left or right
-            if curr != self._root:
-                
-                if curr.parent.pair.key > curr.pair.key:
-                    curr.parent.left = successor
-                elif curr.parent.pair.key < curr.pair.key:
-                    curr.parent.right = successor
-            else:
-                self._root = curr
-
-            return True
-
-        
-
-        
-
-        
-        
-    def __tree_search(self, curr_pos, key):
-        pass
+        self.delete_node(curr)
+        return True
