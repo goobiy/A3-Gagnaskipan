@@ -245,13 +245,16 @@ class BinarySearchTree(IBinarySearchTree):
                 curr = curr.left
 
         return None
+    
+    def __get_node(self):
+        pass
 
     def pairs(self) -> list[Pair]:
         """
         Returns a list of all the (key, value) pairs in the tree, in an increasing order.
         """
 
-        pairs_list = []     # Sjáum hvort þetta sé í lagi, eins og iter fallið
+        pairs_list = []     # Sjáum hvort þetta sé í lagi, eins og iter fallið NOTA FOR TREE IN SELF
         node = self._first()
         while node is not None:
 
@@ -261,18 +264,6 @@ class BinarySearchTree(IBinarySearchTree):
 
         return pairs_list
 
-
-
-    # def __helpME(self):
-    #     pairs = list()
-    #     node = self._root
-    #     if node is None:
-    #         return []
-    #     l = self.__helpME(node.left)
-    #     r = self.__helpME(node.right)
-    #     pairs.append(l)
-    #     pairs.append(r)
-    #     return pairs
 
 
 
@@ -295,9 +286,6 @@ class BinarySearchTree(IBinarySearchTree):
         
         curr = self._root
         
-        if curr.left is None and curr.right is None:
-            curr = None
-            return True
 
         while curr.pair.key != key:
             if key > curr.pair.key:
@@ -305,6 +293,16 @@ class BinarySearchTree(IBinarySearchTree):
             elif key < curr.pair.key:
                 curr = curr.left
 
+        # No childs
+        if curr.left is None and curr.right is None:
+            if curr.parent.pair.key > curr.pair.key:
+                curr.parent.left = None
+            else:
+                curr.parent.right = None
+            curr = None
+            return True
+        
+        # One child
         if curr.left is None:
             curr.right.parent = curr.parent
             curr.parent.left = curr.right
@@ -312,13 +310,49 @@ class BinarySearchTree(IBinarySearchTree):
             curr.left.parent = curr.parent
             curr.parent.right = curr.left
 
-        elif curr.right is not None and curr.left is not None:      # hættum herna
-            succer = self._before(curr)
-            curr.pair = succer.pair
-            curr.right = 
-            # curr.parent.left = self._before(curr)
+        # Two childs
+        elif curr.right is not None and curr.left is not None:
             
-        
+            successor = self._before(curr)
+
+           # VANTAR CONDITION FYRIR ROOT
+
+            # if successor.right is not None:
+            #     successor.parent.right = successor.left
+
+            # Changing the successors parent.right to None only if if the successor was not a leaf
+            if successor.left is not None:
+                
+                #Give the successors children to the successors parent
+                if successor.left is None:
+                    successor.parent.right = successor.right
+                else:
+                   successor.parent.right = successor.right
+
+            else:
+                successor.parent.right = None
+
+            #make sure that successor does not get itself as a child
+            if successor.parent != curr:
+                successor.left = curr.left
+            successor.right = curr.right
+            successor.parent = curr.parent
+
+            # Connecting the child to the new parent
+            curr.left.parent = successor
+            curr.right.parent = successor
+
+            # Connecting the parent to the successor, and checking if its left or right
+            if curr != self._root:
+                
+                if curr.parent.pair.key > curr.pair.key:
+                    curr.parent.left = successor
+                elif curr.parent.pair.key < curr.pair.key:
+                    curr.parent.right = successor
+            else:
+                self._root = curr
+
+            return True
 
         
 
