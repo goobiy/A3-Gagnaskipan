@@ -1,8 +1,9 @@
 #
 # Word frequency.
 # Your name:
-#  - <Add your name here>
-#
+#  Guðmundur Alexander Magnússon
+#  Hafþór Haugen
+#  Olgeir Otri Engilbertsson
 
 from my_dict import MyDict
 
@@ -19,8 +20,23 @@ def word_frequency_alphabetical_pydict(text):
     :param text: text to process
     :return: list of word frequencies
     """
-    # TO DO ...
-    return []
+    word_freq = {}
+
+    text = text.strip()
+    text = text.lower()
+
+    words_list = text.split()
+
+    for word in words_list:
+        if word in word_freq:
+            word_freq[word] = word_freq[word] + 1
+        else:
+            word_freq[word] = 1
+
+        
+    freq_list = [(key,value) for key, value in word_freq.items()]
+
+    return sorted(freq_list)
 
 def word_frequency_alphabetical_mydict(text):
     """
@@ -30,8 +46,23 @@ def word_frequency_alphabetical_mydict(text):
     :param text: text to process
     :return: list of word frequencies
     """
-    # TO DO ...
-    return []
+    freq_dict = MyDict()
+
+    text = text.strip()
+    text = text.lower()
+
+    words_list = text.split()
+
+    for word in words_list:
+        if freq_dict[word] is None:
+            freq_dict[word] = 1
+        else :
+            freq_dict[word] = freq_dict[word] + 1
+        
+    
+    freq_list = [(key, value) for key, value in freq_dict.items()]
+
+    return sorted(freq_list)
 
 
 if __name__ == "__main__":
