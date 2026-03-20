@@ -14,6 +14,7 @@ def test0():
     tree.insert(Pair(10, "Olgier er kongurinn"))
 
     print(tree)
+    print("-"*12)
     print(tree.is_in(10))
     print(tree.is_in(50))
     # For testing _before/_after_/_first/_last
@@ -55,7 +56,8 @@ def test1():
 
 
 # Some basic BST tests, add more tests as needed!
-
+test0()
+test1()
 d = MyDict()
 
 print(d)

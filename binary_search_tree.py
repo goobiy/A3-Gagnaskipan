@@ -1,8 +1,9 @@
 #
 # BST - Trees (Binary Search Trees)
 # Your name:
-#  - <Add your name here>
-#
+#  Guðmundur Alexander Magnússon
+#  Hafþór Haugen
+#  Olgeir Otri Engilbertsson
 from interface.binary_search_tree_abc import Pair, IBinarySearchTree
 
 
@@ -182,7 +183,7 @@ class BinarySearchTree(IBinarySearchTree):
                 curr: BinarySearchTree._Node = curr.right
 
             
-            else:   
+            else:
                 if curr.left is None:
                     new_node = self._Node(curr,None,None,pair)
                     curr.left = new_node
@@ -201,30 +202,17 @@ class BinarySearchTree(IBinarySearchTree):
         """
         Returns True if an element with key is in the tree, otherwise False.
         """
-        curr: BinarySearchTree._Node = self._root
-        if curr is None:
-            return False
+        curr = self._root
+        while curr is not None:
+            if key == curr.pair.key:
+                return True
 
-        while True:
+            elif key < curr.pair.key:
+                curr = curr.left
+            else:
+                curr = curr.right
 
-            # if key == curr.pair.key:
-            #     curr.pair.value = pair.value
-            #     return False
-            
-            if key > curr.pair.key:
-                if curr.pair.key == key:
-                    return True
-                if curr.right is None:
-                    return False
-                curr: BinarySearchTree._Node = curr.right
-
-            
-            else:   
-                if curr.pair.key == key:
-                    return True
-                if curr.left is None:
-                    return False
-                curr: BinarySearchTree._Node = curr.left
+        return False
 
 
     def get(self, key: object) -> object:
@@ -264,7 +252,7 @@ class BinarySearchTree(IBinarySearchTree):
         """
         self._root = None
     
-    def delete_node(self, node: BinarySearchTree._Node):
+    def delete_node(self, node: _Node):
 
         # Two children
         if node.left is not None and node.right is not None:
